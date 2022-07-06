@@ -17,7 +17,7 @@ export default {
       axios
         .post(
           "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json",
-          postData
+          { ...postData, updatedDate: new Date() }
         )
         .then((result) => console.log(result))
         .catch((e) => console.log(e));
