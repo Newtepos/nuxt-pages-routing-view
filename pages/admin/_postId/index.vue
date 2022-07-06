@@ -33,22 +33,23 @@ export default {
         ".json"
     );
 
-    console.log(res.data);
-
-    return { loadedPost: res.data };
+    return { loadedPost: { ...res.data, id: context.params.postId } };
   },
   methods: {
     onSubmitted(editedPost) {
-      axios
-        .put(
-          "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts/" +
-            this.$route.params.postId +
-            ".json",
-          editedPost
-        )
-        .then((res) => {
-          this.$router.push("/admin");
-        });
+      // axios
+      //   .put(
+      //     "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts/" +
+      //       this.$route.params.postId +
+      //       ".json",
+      //     editedPost
+      //   )
+      //   .then((res) => {
+      //     this.$router.push("/admin");
+      //   });
+      this.$store
+        .dispatch("editPost", editedPost)
+        .then(() => this.$router.push("/admin"));
     },
   },
 };
