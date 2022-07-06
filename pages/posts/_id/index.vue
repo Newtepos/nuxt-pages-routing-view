@@ -35,7 +35,7 @@ export default {
     //     };
     //   })
     //   .catch((e) => console.log(e));
-    const res = awaitaxios.get(
+    const res = await axios.get(
       "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts/" +
         context.params.id +
         ".json"
