@@ -1,5 +1,6 @@
 import axios from "axios";
 import Vuex from "vuex";
+import Cookies from "js-cookie";
 
 const createStore = () => {
   return new Vuex.Store({
@@ -88,12 +89,13 @@ const createStore = () => {
             returnSecureToken: true,
           })
           .then((res) => {
+            const expirationDuration =
+              new Date().getTime() + res.expiresIn * 1000;
             context.commit("setToken", res.idToken);
             localStorage.setItem("token", res.idToken);
-            localStorage.setItem(
-              "expirationTime",
-              new Date().getTime() + res.expiresIn * 1000
-            );
+            localStorage.setItem("expirationTime", expirationDuration);
+            Cookies.set("jwt", res.idToken);
+            Cookies.set("expirationDate", expirationDuration);
             context.dispatch("setLogoutTimer", res.expiresIn * 1000);
           })
           .catch((err) => {
@@ -105,19 +107,36 @@ const createStore = () => {
           context.commit("clearToken", duration);
         }, duration);
       },
-      initAuth(context) {
-        const token = localStorage.getItem("token");
-        const expirationTime = localStorage.getItem("expirationTime");
+      initAuth(context, req) {
+        let token;
+        let expirationDuration;
+        if (req) {
+          if (!req.headers.cookie) {
+            return;
+          }
+          const jwtToken = req.headers.cookie
+            .split(";")
+            .find((c) => c.trim().startsWith("jwt="));
+          const expirationToken = req.headers.cookie
+            .split(";")
+            .find((c) => c.trim().startsWith("expirationDate="));
+          if (!jwtToken || !expirationToken) {
+            return;
+          }
 
-        if (new Date().getTime > expirationTime || !token) {
+          token = jwtToken.split("=")[1];
+          expirationDuration = expirationToken.split("=")[1];
+        } else {
+          token = localStorage.getItem("token");
+          expirationDuration = localStorage.getItem("expirationTime");
+        }
+        if (new Date().getTime > +expirationDuration || !token) {
           return;
         }
-
         context.dispatch(
           "setLogoutTimer",
-          +expirationTime - new Date().getTime()
+          +expirationDuration - new Date().getTime()
         );
-
         context.commit("setToken", token);
       },
     },
