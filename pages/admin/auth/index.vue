@@ -27,6 +27,7 @@ import AppButton from "@/components/UI/AppButton";
 
 export default {
   name: "AdminAuthPage",
+  middleware: ["check-auth", "auth"],
   layout: "admin",
   components: {
     AppControlInput,
