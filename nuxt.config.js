@@ -23,7 +23,7 @@ export default {
   loading: { color: "red", height: "4px", duration: 5000 },
 
   loadingIndicator: {
-    name: "cirle",
+    name: "circle",
     color: "red",
   },
 
@@ -40,7 +40,12 @@ export default {
   buildModules: [],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: ["@nuxtjs/axios"],
+
+  axios: {
+    baseURL:
+      "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app",
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

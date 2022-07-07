@@ -40,19 +40,19 @@ const createStore = () => {
           ...post,
           updatedDate: new Date(),
         };
-        return axios
+        return this.$axios
           .post(
             process.env.baseUrl + "/posts.json",
             createdPost
           )
           .then((res) => {
-            context.commit("addPost", { ...createdPost, id: res.data.name });
+            context.commit("addPost", { ...createdPost, id: res.name });
           })
           .catch((e) => console.log(e));
       },
       editPost(context, post) {
-        return axios
-          .put(
+        return this.$axios
+          .$put(
             "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts/" +
               post.id +
               ".json",
