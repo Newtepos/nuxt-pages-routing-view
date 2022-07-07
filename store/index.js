@@ -43,7 +43,10 @@ const createStore = () => {
           updatedDate: new Date(),
         };
         return this.$axios
-          .post(process.env.baseUrl + "/posts.json", createdPost)
+          .post(
+            process.env.baseUrl + "/posts.json?auth=" + context.state.token,
+            createdPost
+          )
           .then((res) => {
             context.commit("addPost", { ...createdPost, id: res.name });
           })
@@ -54,7 +57,8 @@ const createStore = () => {
           .$put(
             "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts/" +
               post.id +
-              ".json",
+              ".json?auth=" +
+              context.state.token,
             post
           )
           .then((res) => {
