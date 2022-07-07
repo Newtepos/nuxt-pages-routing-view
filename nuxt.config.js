@@ -53,6 +53,7 @@ export default {
   env: {
     baseUrl:
       "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app",
+    fbAPIKey: "AIzaSyBoeJThmHkGCc9QZ6pvPSbiN7pEiZuZCHM",
   },
   transition: {
     name: "fade",
