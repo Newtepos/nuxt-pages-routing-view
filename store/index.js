@@ -5,6 +5,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       loadedPosts: [],
+      token: "",
     },
     mutations: {
       setPosts(state, posts) {
@@ -19,13 +20,14 @@ const createStore = () => {
         );
         state.loadedPosts[postIndex] = editedPost;
       },
+      setToken(state, token) {
+        state.token = token;
+      },
     },
     actions: {
       nuxtServerInit(vuexContext, context) {
         return axios
-          .get(
-            process.env.baseUrl + "/posts.json"
-          )
+          .get(process.env.baseUrl + "/posts.json")
           .then((res) => {
             const postsArrays = [];
             for (const key in res.data) {
@@ -41,10 +43,7 @@ const createStore = () => {
           updatedDate: new Date(),
         };
         return this.$axios
-          .post(
-            process.env.baseUrl + "/posts.json",
-            createdPost
-          )
+          .post(process.env.baseUrl + "/posts.json", createdPost)
           .then((res) => {
             context.commit("addPost", { ...createdPost, id: res.name });
           })
@@ -67,6 +66,26 @@ const createStore = () => {
       },
       setPosts(context, posts) {
         context.commit("setPosts", posts);
+      },
+      authenticationUser(context, authPayload) {
+        let authUrl =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
+        if (!authPayload.isLogin) {
+          authUrl =
+            "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=";
+        }
+        return this.$axios
+          .$post(authUrl + process.env.fbAPIKey, {
+            email: authPayload.email,
+            password: authPayload.password,
+            returnSecureToken: true,
+          })
+          .then((res) => {
+            context.commit("setToken", res.idToken);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       },
     },
     getters: {
