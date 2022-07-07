@@ -59,7 +59,7 @@ export default {
     mode: "out-in",
   },
 
-  router: {
-    middleware: "log",
-  },
+  // router: {
+  //   middleware: "log",
+  // },
 };
