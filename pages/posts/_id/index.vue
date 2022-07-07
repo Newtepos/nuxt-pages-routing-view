@@ -21,6 +21,7 @@
 
 <script>
 export default {
+  middleware: ["auth"],
   async asyncData(context) {
     // return axios
     //   .get(

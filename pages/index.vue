@@ -10,6 +10,7 @@
 <script>
 import PostList from "~/components/Posts/PostList.vue";
 export default {
+  middleware: ['auth'],
   components: {
     PostList,
   },
