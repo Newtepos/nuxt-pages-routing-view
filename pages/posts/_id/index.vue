@@ -43,6 +43,9 @@ export default {
 
     return { loadedPost: res.data };
   },
+  head: {
+    title: "A Blog Post"
+  }
 };
 </script>
 
