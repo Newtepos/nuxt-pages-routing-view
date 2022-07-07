@@ -1,4 +1,5 @@
 export default {
+  mode: "universal",
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "nuxt-pages-routing-view",
@@ -19,7 +20,12 @@ export default {
       },
     ],
   },
-  loading: { color: "red" },
+  loading: { color: "red", height: "4px", duration: 5000 },
+
+  loadingIndicator: {
+    name: "cirle",
+    color: "red",
+  },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
@@ -38,4 +44,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  env: {
+    baseUrl:
+      "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app",
+  },
 };

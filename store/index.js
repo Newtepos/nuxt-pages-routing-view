@@ -24,7 +24,7 @@ const createStore = () => {
       nuxtServerInit(vuexContext, context) {
         return axios
           .get(
-            "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json"
+            process.env.baseUrl + "/posts.json"
           )
           .then((res) => {
             const postsArrays = [];
@@ -42,7 +42,7 @@ const createStore = () => {
         };
         return axios
           .post(
-            "https://nuxt-blog-2dc52-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json",
+            process.env.baseUrl + "/posts.json",
             createdPost
           )
           .then((res) => {
