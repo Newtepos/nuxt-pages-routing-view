@@ -89,17 +89,37 @@ const createStore = () => {
           })
           .then((res) => {
             context.commit("setToken", res.idToken);
-            context.dispatch('setLogoutTimer', res.expiresIn * 1000)
+            localStorage.setItem("token", res.idToken);
+            localStorage.setItem(
+              "expirationTime",
+              new Date().getTime() + res.expiresIn * 1000
+            );
+            context.dispatch("setLogoutTimer", res.expiresIn * 1000);
           })
           .catch((err) => {
             console.log(err);
           });
       },
-      setLogoutTimer(context,duration) {
+      setLogoutTimer(context, duration) {
         setTimeout(() => {
-          context.commit('clearToken', duration)
-        })
-      }
+          context.commit("clearToken", duration);
+        }, duration);
+      },
+      initAuth(context) {
+        const token = localStorage.getItem("token");
+        const expirationTime = localStorage.getItem("expirationTime");
+
+        if (new Date().getTime > expirationTime || !token) {
+          return;
+        }
+
+        context.dispatch(
+          "setLogoutTimer",
+          +expirationTime - new Date().getTime()
+        );
+
+        context.commit("setToken", token);
+      },
     },
     getters: {
       loadedPosts(state) {
