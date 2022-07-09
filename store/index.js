@@ -124,7 +124,7 @@ const createStore = () => {
 
           token = jwtToken.split("=")[1];
           expirationDuration = expirationToken.split("=")[1];
-        } else {
+        } else if (process.client) {
           token = localStorage.getItem("token");
           expirationDuration = localStorage.getItem("expirationTime");
         }
@@ -140,8 +140,10 @@ const createStore = () => {
         context.commit("clearToken");
         Cookies.remove("jwt");
         Cookies.remove("expirationDateF");
-        localStorage.removeItem("token");
-        localStorage.removeItem("expirationTime");
+        if (process.client) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("expirationTime");
+        }
       },
     },
     getters: {

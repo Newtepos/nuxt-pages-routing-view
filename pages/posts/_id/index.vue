@@ -35,6 +35,11 @@ export default {
     //     };
     //   })
     //   .catch((e) => console.log(e));
+    if (context.payload) {
+      return {
+        loadedPost: context.payload.postData,
+      };
+    }
     const res = await context.app.$axios.$get(
       "/posts/" + context.params.id + ".json"
     );
