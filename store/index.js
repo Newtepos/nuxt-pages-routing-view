@@ -127,10 +127,18 @@ const createStore = () => {
         }
         if (new Date().getTime() > +expirationDuration || !token) {
           console.log("No token or invalid Token");
-          context.commit("clearToken");
+          context.dispatch("logout");
           return;
         }
         context.commit("setToken", token);
+      },
+
+      logout(context) {
+        context.commit("clearToken");
+        Cookies.remove("jwt");
+        Cookies.remove("expirationDateF");
+        localStorage.removeItem("token");
+        localStorage.removeItem("expirationTime");
       },
     },
     getters: {
