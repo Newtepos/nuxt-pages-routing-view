@@ -90,23 +90,18 @@ const createStore = () => {
           })
           .then((res) => {
             const expirationDuration =
-              new Date().getTime() + res.expiresIn * 1000;
+              new Date().getTime() + Number.parseInt(res.expiresIn) * 1000;
             context.commit("setToken", res.idToken);
             localStorage.setItem("token", res.idToken);
             localStorage.setItem("expirationTime", expirationDuration);
             Cookies.set("jwt", res.idToken);
             Cookies.set("expirationDate", expirationDuration);
-            context.dispatch("setLogoutTimer", res.expiresIn * 1000);
           })
           .catch((err) => {
             console.log(err);
           });
       },
-      setLogoutTimer(context, duration) {
-        setTimeout(() => {
-          context.commit("clearToken", duration);
-        }, duration);
-      },
+
       initAuth(context, req) {
         let token;
         let expirationDuration;
@@ -130,13 +125,11 @@ const createStore = () => {
           token = localStorage.getItem("token");
           expirationDuration = localStorage.getItem("expirationTime");
         }
-        if (new Date().getTime > +expirationDuration || !token) {
+        if (new Date().getTime() > +expirationDuration || !token) {
+          console.log("No token or invalid Token");
+          context.commit("clearToken");
           return;
         }
-        context.dispatch(
-          "setLogoutTimer",
-          +expirationDuration - new Date().getTime()
-        );
         context.commit("setToken", token);
       },
     },
